@@ -1,0 +1,263 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+ 
+ 
+ 
+class DLLNode<E> {
+    protected E element;
+    protected DLLNode<E> pred, succ;
+ 
+    public DLLNode(E elem, DLLNode<E> pred, DLLNode<E> succ) {
+        this.element = elem;
+        this.pred = pred;
+        this.succ = succ;
+    }
+ 
+    @Override
+    public String toString() {
+        return element.toString();
+    }
+}
+ 
+ 
+ 
+ class DLL<E> {
+    private DLLNode<E> first, last;
+ 
+    public DLL() {
+        // Construct an empty SLL
+        this.first = null;
+        this.last = null;
+    }
+ 
+ 
+   
+    public void insertFirst(E o) {
+        DLLNode<E> ins = new DLLNode<E>(o, null, first);
+        if (first == null)
+            last = ins;
+        else
+            first.pred = ins;
+        first = ins;
+    }
+ 
+    public void insertLast(E o) {
+        if (first == null)
+            insertFirst(o);
+        else {
+            DLLNode<E> ins = new DLLNode<E>(o, last, null);
+            last.succ = ins;
+            last = ins;
+        }
+    }
+
+    public E deleteFirst() {
+        if (first != null) {
+            DLLNode<E> tmp = first;
+            first = first.succ;
+            if (first != null) first.pred = null;
+            if (first == null)
+                last = null;
+            return tmp.element;
+        } else
+            return null;
+    }
+ 
+    public E deleteLast() {
+        if (first != null) {
+            if (first.succ == null)
+                return deleteFirst();
+            else {
+                DLLNode<E> tmp = last;
+                last = last.pred;
+                last.succ = null;
+                return tmp.element;
+            }
+        }
+        // else throw Exception
+        return null;
+    }
+ 
+    public E delete(DLLNode<E> node) {
+        if(node==first){
+            deleteFirst();
+            return node.element;
+        }
+        if(node==last){
+            deleteLast();
+            return node.element;
+        }
+        node.pred.succ = node.succ;
+        node.succ.pred = node.pred;
+        return node.element;
+       
+    }
+ 
+    @Override
+    public String toString() {
+        String ret = new String();
+        if (first != null) {
+            DLLNode<E> tmp = first;
+            ret += tmp + "<->";
+            while (tmp.succ != null) {
+                tmp = tmp.succ;
+                ret += tmp + "<->";
+            }
+        } else
+            ret = "Prazna lista!!!";
+        return ret;
+    }
+   
+ 
+    public DLLNode<E> getFirst() {
+        return first;
+    }
+ 
+    public DLLNode<E> getLast() {
+ 
+        return last;
+    }
+   
+    public void izvadiDupliIPrebroj(){
+       
+    }
+}
+class Vraboten
+{
+int ID;
+    int plata;
+    Vraboten(int ID,int plata)
+    {
+    this.ID=ID;
+    this.plata=plata;}
+   
+    public int getID()
+    {
+    return this.ID;}
+   
+    public int getPlata()
+    {
+    return this.plata;}
+ 
+ 
+}
+ 
+public class DLLKompanija
+{
+ 
+    public static void brisi (DLL<Vraboten>lista,int max)
+    {
+    DLLNode<Vraboten> jazol=lista.getFirst();
+        int br=0;
+        while(jazol!=null)
+        {
+        if(jazol.element.plata<max)
+        {
+        lista.delete(jazol);
+           
+        }
+        else br++;
+            jazol=jazol.succ;
+        }
+         if(br==0)
+        {
+        System.out.println("nema");
+        }
+            else
+                sortiraj(lista);
+       
+       
+       
+        }
+   
+   
+   
+   
+   
+ 
+ 
+public static void sortiraj(DLL<Vraboten> lista)
+{
+DLLNode<Vraboten> jazol=lista.getFirst();
+    while(jazol!=null)
+    {
+    DLLNode<Vraboten> jazol2=jazol;
+ 
+   
+    while(jazol2!=null)
+    {
+    if(jazol.element.ID<jazol2.element.ID)
+    {
+    int pom;
+        pom=jazol.element.ID;
+        jazol.element.ID=jazol2.element.ID;
+        jazol2.element.ID=pom;
+   
+   
+   
+   
+   
+    int a;
+        a=jazol.element.plata;
+        jazol.element.plata=jazol2.element.plata;
+        jazol2.element.plata=a;
+   
+   
+    }
+    jazol2=jazol2.succ;
+    }
+   
+    jazol=jazol.succ;
+    }
+pecati(lista);
+ 
+}
+ 
+    public static void pecati(DLL<Vraboten> lista)
+    {
+    DLLNode<Vraboten> jazol=lista.getFirst();
+        while(jazol!=null)
+        {
+        System.out.println(jazol.element.ID +" " +jazol.element.plata);
+       
+        jazol=jazol.succ;
+        }
+   
+   
+   
+   
+   
+    }
+ 
+    public static void main(String [] args) throws IOException{
+   
+     BufferedReader br=new BufferedReader(new InputStreamReader(System.in))  ;
+         DLL<Vraboten> lista=new DLL<Vraboten> ();
+       
+        int N,i;
+       
+       
+        String s=br.readLine();
+       
+        N=Integer.parseInt(s);
+       
+        for( i=0;i<N;i++)
+        {
+           s=br.readLine();
+        String s1=br.readLine();
+        lista.insertLast(new Vraboten(Integer.parseInt(s),Integer.parseInt(s1)));
+        }
+       
+       
+        String p=br.readLine();
+        int max=Integer.parseInt(p);
+        brisi(lista,max);
+       
+   
+   
+   
+    }
+   
+ 
+}
