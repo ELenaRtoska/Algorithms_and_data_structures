@@ -1,0 +1,120 @@
+import java.util.*;
+ 
+class Gragjanin{
+    protected String ime;
+    protected int karta, pasos, vozacka;
+    public Gragjanin() {}
+    public Gragjanin(String ime, int karta, int pasos, int vozacka) {
+        this.ime = ime;
+        this.karta = karta;
+        this.pasos = pasos;
+        this.vozacka = vozacka;
+    }
+}
+ 
+class SLLNode<E> {
+    protected E element;
+    protected SLLNode<E> succ;
+    public SLLNode(E element, SLLNode<E> succ) {
+        this.element = element;
+        this.succ = succ;
+    }
+}
+ 
+class Queue<E> {
+    private SLLNode<E> front, rear;
+    private int length;
+    public Queue() {
+        front = null;
+        rear = null;
+        length = 0;
+    }
+    public boolean isEmpty() {
+        return length == 0;
+    }
+    public int size() {
+        return length;
+    }
+    public E peek() {
+        if(length > 0)
+            return front.element;
+        else
+            throw new NoSuchElementException();
+    }
+    public void enque(E x) {
+        SLLNode<E> tmp = new SLLNode(x, null);
+        if(length > 0){
+            rear.succ = tmp;
+            rear = tmp;
+        } else
+            front = rear = tmp;
+        length++;
+    }
+    public E deque() {
+        if(length > 0){
+            E tmp = front.element;
+            front = front.succ;
+            length--;
+            return tmp;
+        } else
+            throw new NoSuchElementException();
+    }
+    @Override
+    public String toString() {
+        String s = new String();
+        SLLNode<E> node = front;
+        while(node != null){
+            s += node.element + "\n";
+            node = node.succ;
+        }
+        return s;
+    }
+}
+ 
+public class MVR {
+    public static void print(Gragjanin[] g) {
+        Queue<Gragjanin> lkarta = new Queue();
+        Queue<Gragjanin> pasos = new Queue();
+        Queue<Gragjanin> vozacka = new Queue();
+        Gragjanin temp = new Gragjanin();
+        for(Gragjanin gr : g)
+            if(gr.karta == 1)
+                lkarta.enque(gr);
+            else if(gr.pasos == 1)
+                pasos.enque(gr);
+            else if(gr.vozacka == 1)
+                vozacka.enque(gr);
+        while(!lkarta.isEmpty()){
+            temp = lkarta.deque();
+            if(temp.pasos == 0&&temp.vozacka == 0)
+                System.out.println(temp.ime);
+            else if(temp.pasos == 1)
+                pasos.enque(temp);
+            else
+                vozacka.enque(temp);
+        }
+        while(!pasos.isEmpty()){
+            temp = pasos.deque();
+            if(temp.vozacka == 0)
+                System.out.println(temp.ime);
+            else
+                vozacka.enque(temp);
+        }
+        while(!vozacka.isEmpty())
+            System.out.println(vozacka.deque().ime);
+    }
+    public static void main(String[] args) {
+        Scanner br = new Scanner(System.in);
+        int N = Integer.parseInt(br.nextLine());
+        Gragjanin[] g = new Gragjanin[N];
+        for(int i = 1; i <= N; i++){
+            String imePrezime = br.nextLine();
+            int lKarta = Integer.parseInt(br.nextLine());
+            int pasos = Integer.parseInt(br.nextLine());
+            int vozacka = Integer.parseInt(br.nextLine());
+            Gragjanin covek = new Gragjanin(imePrezime, lKarta, pasos, vozacka);
+            g[i - 1] = covek;
+        }
+        print(g);
+    }
+}
