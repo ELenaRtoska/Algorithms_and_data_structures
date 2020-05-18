@@ -1,0 +1,121 @@
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.Scanner;
+ 
+public class Apteka {
+ 
+    public static void main(String[] args) {
+       
+        Scanner scan = new Scanner(System.in);
+        Map<CureName, Cure> table = new HashMap<>();
+       
+        int n = scan.nextInt();
+        scan.nextLine();
+       
+        for (int i=0; i<n; ++i) {
+            String line = scan.nextLine();
+            String parts[] = line.split(" ");
+            String name = parts[0];
+            int positive = Integer.parseInt(parts[1]);
+            int price = Integer.parseInt(parts[2]);
+            int number = Integer.parseInt(parts[3]);
+            Cure cure = new Cure(name, positive, price, number);
+            CureName cureName = new CureName(name);
+            table.put(cureName, cure);
+        }
+       
+        while (true) {
+           
+            String name = scan.nextLine();
+            if (name.equals("KRAJ"))
+                break;
+            int number = Integer.parseInt(scan.nextLine());
+            CureName cureName = new CureName(name);
+            if (table.containsKey(cureName)) {
+                Cure cure = table.get(cureName);
+                System.out.println(cure);
+                if (cure.makeOrder(number))
+                    System.out.println("Napravena naracka");
+                else
+                    System.out.println("Nema dovolno lekovi");
+            }
+            else
+                System.out.println("Nema takov lek");
+           
+        }
+    }
+}
+ 
+class Cure {
+   
+    String name;
+    int positive;
+    int price;
+    int number;
+   
+    Cure(String name, int positive, int price, int number) {
+        this.name = name.toUpperCase();
+        this.positive = positive;
+        this.price = price;
+        this.number = number;
+    }
+   
+    String getPositive() {
+        if (positive == 1)
+            return "POZ";
+        else
+            return "NEG";
+    }
+ 
+    boolean makeOrder(int n) {
+        if (number >= n){
+            number -=n;
+            return true;
+        }
+        return false;
+    }
+   
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(name + "\n");
+        sb.append(getPositive() + "\n");
+        sb.append(price + "\n");
+        sb.append(number);
+        return sb.toString();
+    }
+ 
+       
+}
+ 
+class CureName {
+   
+    String name;
+   
+    public CureName(String name){
+        this.name = name.toUpperCase();
+    }
+   
+    @Override
+    public int hashCode() {
+        return (29 * (29 * (29 * 0 + name.charAt(0)) + name.charAt(1))+ name.charAt(2)) % 102780;
+    }
+ 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        CureName other = (CureName) obj;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        return true;
+    }
+}
