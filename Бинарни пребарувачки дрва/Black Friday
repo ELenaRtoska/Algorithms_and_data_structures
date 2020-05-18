@@ -1,0 +1,60 @@
+import java.util.*;
+ 
+public class BlackFriday {
+    
+    
+        public static void main(String[] args) {
+               
+            
+            
+                Hashtable<Integer, Integer> table = new Hashtable<Integer, Integer>();
+                Scanner scanner = new Scanner(System.in);
+               
+                //read the number of clients
+                int N = Integer.parseInt(scanner.nextLine());
+                for (int i=0; i<N; ++i){
+                    
+                    
+                    
+                    
+                       
+                        //read a whole line
+                        String s = scanner.nextLine();
+                        String[] time = s.split("\\s+");
+                        String[] inTime = time[0].split(":");
+                       
+                    
+                    
+                        //calculate the entering time
+                        int in = Integer.parseInt(inTime[0])*60 + Integer.parseInt(inTime[1]);
+                       
+                        //calculate the exiting time
+                        int out = in + Integer.parseInt(time[1]);
+                       
+                        //see if the timings are after closing at 23:59
+                        if (in > 1439) in = 1439;
+                        if (out > 1439) out = 1439;
+                       
+                        //for each minute, increment the value in the hash table
+                        for (int j=in; j<=out; ++j){
+                                Integer minute = table.get(j);
+                                if (minute == null) table.put(j, 1);
+                                else{
+                                        table.put(j, table.get(j) + 1);
+                                }
+                        }
+                }
+               
+                int max = 0;
+               
+                //find the max counter in the values
+                for (Integer value : table.values()){
+                        if (max < value) max = value;
+                }
+               
+                //print the max number of customers at a give point in time
+                System.out.println(max);
+               
+                scanner.close();
+        }
+}
