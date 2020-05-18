@@ -1,6 +1,5 @@
 import java.util.*;
- 
-class Gragjanin{
+ class Gragjanin{
     protected String ime;
     protected int karta, pasos, vozacka;
     public Gragjanin() {}
