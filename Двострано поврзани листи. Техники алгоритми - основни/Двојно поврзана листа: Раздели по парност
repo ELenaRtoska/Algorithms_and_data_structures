@@ -1,0 +1,107 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+ 
+class DLLNode<E>
+{
+    E element;
+    DLLNode<E> succ;
+    DLLNode<E> pred;
+   
+    public DLLNode(E element,DLLNode<E> succ,DLLNode<E> pred){
+        this.element=element;
+        this.succ=succ;
+        this.pred=pred;
+    }
+ 
+    @Override
+    public String toString() {
+        return element+" ";
+    }
+       
+}
+class DLL<E>
+{
+    DLLNode<E> first;
+    DLLNode<E> last;
+   
+    DLL(){
+        first=null;
+        last=null;
+    }
+    public void insertFirst(E element)
+    {
+        DLLNode<E> temp = new DLLNode<>(element,first,null);
+        if(first==null)
+        {
+            last=temp;
+        }
+        else
+        {
+            first.pred=temp;
+        }
+        first=temp;
+    }
+    public void insertLast(E element)
+    {
+        DLLNode<E>temp=new DLLNode<>(element,null,last);
+        if(first==null)
+        {
+            first=temp;
+        }
+        else{
+        last.succ=temp;
+        }
+        last=temp;
+    }
+    @Override
+    public String toString() {
+        DLLNode<E> dvizi = first;
+        String s="";
+        while(dvizi!=null)
+        {
+            if(dvizi.succ==null)s+=dvizi.element;
+            else
+                {
+                s += dvizi.toString();
+                }
+            dvizi=dvizi.succ;
+       
+        } 
+        return s;     
+    }
+}
+ 
+public class DivideOddEven {
+   
+    public static void razdeli(DLL<Integer> lista)
+    {
+        DLLNode<Integer> dvizi = lista.first;
+        DLL<Integer> parni = new DLL<>();
+        DLL<Integer> neparni = new DLL<>();
+        while(dvizi!=null)
+        {
+            if(dvizi.element%2==0) parni.insertLast(dvizi.element);
+            else
+                neparni.insertLast(dvizi.element);
+           
+            dvizi=dvizi.succ;
+        }
+        System.out.println(neparni);
+        System.out.println(parni);
+    }
+   
+    public static void main(String[] args) throws IOException {
+       
+        DLL<Integer> lista = new DLL<>();
+        BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
+        String s = stdin.readLine();
+        int N = Integer.parseInt(s);
+        s = stdin.readLine();
+        String[] pomniza = s.split(" ");
+        for (int i = 0; i < N; i++) {
+            lista.insertLast(Integer.parseInt(pomniza[i]));
+        }
+        razdeli(lista);
+}
+}
