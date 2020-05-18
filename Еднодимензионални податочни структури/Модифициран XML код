@@ -1,0 +1,52 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.NoSuchElementException;
+import java.util.Stack;
+ 
+public class CheckXML {
+    //vraka 0 za podatok, 1 za zatvoren tag i -1 za otvoren tag
+    public static int wtype(String s){
+        if(s.charAt(0) != '[')  return 0;
+        else if(s.charAt(1) == '/') return 1;
+        else return -1;
+    }
+ 
+    public static void main(String[] args) throws Exception{
+ 
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String s = br.readLine();
+        int n = Integer.parseInt(s);
+        String [] redovi = new String[n];
+ 
+        for(int i=0;i<n;i++)
+            redovi[i] = br.readLine();
+ 
+        int valid = 1;
+ 
+        Stack<String> stek = new Stack<>();
+ 
+        for(String a : redovi){
+            if(wtype(a) == 0) continue;
+            if(wtype(a) == -1)
+                stek.push(a.substring(1, a.length()-1));
+            else {      //ako stekot e prazen ili ako prviot element od stekot ne e ednakov so zatvoreniot tag vrati 0
+                if(stek.isEmpty() || !(a.substring(2, a.length()-1).equals(stek.peek())))
+                {
+                    valid = 0;
+                    break;
+                }
+ 
+                stek.pop();
+            }
+        }
+ 
+        if(!(stek.isEmpty())) valid = 0;
+        // Vasiot kod tuka
+        // Moze da koristite dopolnitelni funkcii ako vi se potrebni
+ 
+        System.out.println(valid);
+ 
+        br.close();
+    }
+}
+ 
